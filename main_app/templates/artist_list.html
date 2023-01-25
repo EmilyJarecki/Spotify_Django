@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% comment %} for head title tags and helping us with SEO {% endcomment %}
+{% block title %}Artist{% endblock  %}
+
+{% block content %}
+
+<h1 class="title pt-5">Trending Artists</h1>
+<div class="gallery">
+  {% for artist in artists %}
+  <a href="">
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-square">
+          <img src="{{artist.image}}" alt="{{artist.name}}" />
+        </figure>
+      </div>
+      <div class="card-header">
+        <p class="card-header-title">{{artist.name}}</p>
+      </div>
+    </div>
+  </a>
+	{% empty %}
+  <article class="message">
+    <div class="message-header">
+      <p>No Artists Available</p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

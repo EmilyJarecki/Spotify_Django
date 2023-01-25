@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+<!-- SEO stands for “search engine optimization.” In simple terms, it means the process of improving your site to increase its visibility when people search -->
+{% comment %} for head title tags and helping us with SEO {% endcomment %}
+{% block title %}Songs{% endblock  %}
+
+{% block content %}
+
+<h1 class="title pt-5">Trending Songs</h1>
+<div class="gallery">
+  {% for song in songs %}
+  <a href="">
+    <div class="card">
+      <div class="card-header">
+        <p class="card-header-title">{{song.song_name}}</p>
+        <p class="card-header-title">By: {{song.artist}}</p>
+      </div>
+    </div>
+  </a>
+	{% empty %}
+  <article class="message">
+    <div class="message-header">
+      <p>No Songs Available</p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}
