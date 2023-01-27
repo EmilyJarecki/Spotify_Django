@@ -1,0 +1,15 @@
+{% extends 'base.html' %} 
+{% block content %}
+<h1>Add an Artist</h1>
+
+<form method="post">
+<!-- Security Feature  -->
+<!-- READ MORE ABOUT CSRF_TOKEN: https://docs.djangoproject.com/en/4.0/ref/csrf/ -->
+  {% csrf_token %} 
+<!--  Generate inputs  -->
+  {{form.as_p}} 
+<!--  Submit form  -->
+  <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
