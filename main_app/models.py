@@ -28,7 +28,7 @@ class Song(models.Model):
 
     def __str__(self):
         return self.title
-        
+
     # Here we define the method to look at the length property and convert it
     def get_length(self):
         return time.strftime("%-M:%S", time.gmtime(self.length))

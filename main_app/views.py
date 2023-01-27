@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 # view class handles requests
-# from django.views import View
+from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -8,6 +8,8 @@ from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from django.urls import reverse
 from .models import Artist
+from .models import Song as SingleSong
+
 
 
 #Instatntiate an artist for our fake database
@@ -113,3 +115,10 @@ class SongList(TemplateView):
         context['songs'] = songs
         return context
 
+class SongCreate(View):
+    def post(self, request, pk):
+        title = request.POST.get("title")
+        length = request.POST.get("length")
+        artist = Artist.objects.get(pk=pk)
+        SingleSong.objects.create(title=title, length=length, artist=artist)
+        return redirect('artist_detail', pk=pk)

@@ -27,6 +27,40 @@
     </a>
     <!-- inside container -->
     <div class="detail__songs mb-5">
+        <!-- inside detail songs element below the header -->
+
+<!-- Here you can see the action we provided
+    is to the song_create route with the artist pk -->
+    <form class="mb-5" action="{% url 'song_create' artist.pk %}" method="post">
+        {% csrf_token %}
+        <div class="field has-addons">
+            <div class="control">
+                <input
+                    class="input"
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    required
+                />
+            </div>
+            <div class="control">
+                <input
+                    class="input"
+                    type="number"
+                    name="length"
+                    placeholder="Length in Seconds"
+                    min="1"
+                    required
+                />
+            </div>
+            <div class="control">
+                <input class="button is-primary" type="submit" value="Add Song" />
+            </div>
+        </div>
+    </form>
+    
+    <!-- before the for loop for songs -->
+
       <h3 class="title is-3">Songs</h3>
 
       {%for song in artist.songs.all%}
