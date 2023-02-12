@@ -131,3 +131,26 @@ class Home(TemplateView):
         context["playlists"] = Playlist.objects.all()
         return context
 
+class PlaylistSongAssoc(View):
+    def get(self, request, pk, song_pk):
+        # get the query param from the url
+        assoc = request.GET.get("assoc")
+        if assoc == "remove":
+            # get the playlist by the id and
+            # remove from the join table the given song_id
+            Playlist.objects.get(pk=pk).songs.remove(song_pk)
+        if assoc == "add":
+            # get the playlist by the id and
+            # add to the join table the given song_id
+            Playlist.objects.get(pk=pk).songs.add(song_pk)
+        return redirect('home')
+
+class ArtistDetail(DetailView):
+    model = Artist
+    template_name = "artist_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["playlists"] = Playlist.objects.all()
+        return context
+
