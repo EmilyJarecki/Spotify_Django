@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 # a class to handle sending a type of response
 from django.http import HttpResponse
 from django.urls import reverse
-from .models import Artist
+from .models import Artist, Playlist
 from .models import Song as SingleSong
 
 
@@ -122,3 +122,12 @@ class SongCreate(View):
         artist = Artist.objects.get(pk=pk)
         SingleSong.objects.create(title=title, length=length, artist=artist)
         return redirect('artist_detail', pk=pk)
+
+class Home(TemplateView):
+    template_name = "home.html"
+    # Here we have added the playlists as context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["playlists"] = Playlist.objects.all()
+        return context
+

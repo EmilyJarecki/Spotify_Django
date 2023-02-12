@@ -1,7 +1,24 @@
-{% extends 'base.html' %}
-{% block title %}
-Home
-{% endblock %}
+{% extends 'base.html' %} 
 {% block content %}
-<h1>Spotify Home</h1>
+<div class="home__playlists">
+    {% for playlist in playlists %}
+
+        <div class="playlist mb-5">
+            <h3 class="title is-3 has-text-success">{{playlist.title}}</h3>
+            <hr />
+
+            {% for song in playlist.songs.all %}
+
+                <div class="song">
+                    <span>{{forloop.counter}}</span>
+                    <span><b>{{song.title}}</b></span>
+                    <span>{{song.get_length}}</span>
+                </div>
+
+            {% endfor %}
+        </div>
+    {% empty %} 
+        <div class="playlist mb-5">"There are no songs in this playlist"</div>
+    {% endfor %}
+</div>
 {% endblock %}
