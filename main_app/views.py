@@ -9,11 +9,13 @@ from django.http import HttpResponse
 from django.urls import reverse
 from .models import Artist, Playlist
 from .models import Song as SingleSong
-# user auth
+# user authorization
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-
+# user authentication
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Instatntiate an artist for our fake database
 # no need for it bc it is fake
@@ -44,6 +46,9 @@ class Home(TemplateView):
 class About(TemplateView):
     template_name = "about.html"
 
+# this line protects route for user auth
+# if you try to navigate to /artists it will redirect you to /login
+@method_decorator(login_required, name='dispatch')
 class ArtistList(TemplateView):
     # anticipated artist_list has yet to be created (our next step)
     template_name = "artist_list.html"
@@ -72,7 +77,7 @@ class ArtistList(TemplateView):
             context['header'] = 'Trending Artists'
         return context
 
-
+@method_decorator(login_required, name='dispatch')
 class ArtistCreate(CreateView):
     model = Artist
     fields = ['name', 'img', 'bio', 'verified_artist']
@@ -85,7 +90,6 @@ class ArtistCreate(CreateView):
 
     def get_success_url(self):
         return reverse('artist_detail', kwargs={'pk': self.object.pk})
-
 
 class ArtistDetail(DetailView):
     model = Artist
@@ -101,13 +105,13 @@ class ArtistUpdate(UpdateView):
     def get_success_url(self):
         return reverse('artist_detail', kwargs={'pk': self.object.pk})
 
-
+@method_decorator(login_required, name='dispatch')
 class ArtistDelete(DeleteView):
     model = Artist
     template_name = 'artist_delete_confirmation.html'
     success_url = '/artists/'
 
-
+@method_decorator(login_required, name='dispatch')
 class SongList(TemplateView):
     template_name = 'song_list.html'
 
@@ -115,8 +119,8 @@ class SongList(TemplateView):
         context = super().get_context_data(**kwargs)
         context['songs'] = songs
         return context
-
-
+        
+@method_decorator(login_required, name='dispatch')
 class SongCreate(View):
     def post(self, request, pk):
         title = request.POST.get("title")
@@ -125,7 +129,7 @@ class SongCreate(View):
         SingleSong.objects.create(title=title, length=length, artist=artist)
         return redirect('artist_detail', pk=pk)
 
-
+@method_decorator(login_required, name='dispatch')
 class Home(TemplateView):
     template_name = "home.html"
     # Here we have added the playlists as context
@@ -135,7 +139,7 @@ class Home(TemplateView):
         context["playlists"] = Playlist.objects.all()
         return context
 
-
+@method_decorator(login_required, name='dispatch')
 class PlaylistSongAssoc(View):
     def get(self, request, pk, song_pk):
         # get the query param from the url
@@ -150,7 +154,7 @@ class PlaylistSongAssoc(View):
             Playlist.objects.get(pk=pk).songs.add(song_pk)
         return redirect('home')
 
-
+@method_decorator(login_required, name='dispatch')
 class ArtistDetail(DetailView):
     model = Artist
     template_name = "artist_detail.html"
