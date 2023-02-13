@@ -11,8 +11,7 @@ from .models import Artist, Playlist
 from .models import Song as SingleSong
 
 
-
-#Instatntiate an artist for our fake database
+# Instatntiate an artist for our fake database
 # no need for it bc it is fake
 # class Artist:
 #     def __init__(self, name, image, bio):
@@ -40,6 +39,7 @@ class Song:
 #           "https://i1.sndcdn.com/artworks-sNjd3toBZYCG-0-t500x500.jpg", "Ryan Gary Raddon, better known by his stage name Kaskade, is an American DJ, record producer, and remixer."),
 # ]
 
+
 songs = [
     Song("Feel Good Inc", "Gorillaz"),
     Song("DARE", "Gorillaz"),
@@ -54,66 +54,82 @@ songs = [
 class Home(TemplateView):
     template_name = "home.html"
 
+
 class About(TemplateView):
     template_name = "about.html"
+
 
 class ArtistList(TemplateView):
     # anticipated artist_list has yet to be created (our next step)
     template_name = "artist_list.html"
 
-    # kwargs allows use to pass a variable number of keyword arguments to a Python function 
+    # kwargs allows use to pass a variable number of keyword arguments to a Python function
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # this is to get the query parameter. We have to access it in the request.GET dictionary object
         name = self.request.GET.get("name")
-        if name != None: 
+        if name != None:
             # can be "album__icontains=album" if you would like to look it up by album instead of name
-            context['artists'] = Artist.objects.filter(name__icontains=name)
+            context['artists'] = Artist.objects.filter(
+                name__icontains=name, user=self.request.user)
             context['header'] = f'Searching for {name}'
         else:
             # .filter is the sql WHERE statement and name__icontains is doing a search for any name that contains the query param
 
-        # Context dictionary should have an artists key which has the value of all instantiated artists from above
-        
-        #below if for static data/fake database
-        # context['artists'] = artists
+            # Context dictionary should have an artists key which has the value of all instantiated artists from above
 
-        #using the model to query the database
-            context['artists'] = Artist.objects.all()
+            # below if for static data/fake database
+            # context['artists'] = artists
+
+            # using the model to query the database
+            context['artists'] = Artist.objects.filter(user=self.request.user)
             context['header'] = 'Trending Artists'
         return context
+
 
 class ArtistCreate(CreateView):
     model = Artist
     fields = ['name', 'img', 'bio', 'verified_artist']
     template_name = "artist_create.html"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ArtistCreate, self).form_valid(form)
     # success_url = "/artists/"
+
     def get_success_url(self):
         return reverse('artist_detail', kwargs={'pk': self.object.pk})
+
 
 class ArtistDetail(DetailView):
     model = Artist
     template_name = "artist_detail.html"
+
 
 class ArtistUpdate(UpdateView):
     model = Artist
     fields = ['name', 'img', 'bio', 'verified_artist']
     template_name = 'artist_update.html'
     # success_url = '/artists'
+
     def get_success_url(self):
         return reverse('artist_detail', kwargs={'pk': self.object.pk})
+
 
 class ArtistDelete(DeleteView):
     model = Artist
     template_name = 'artist_delete_confirmation.html'
     success_url = '/artists/'
 
+
 class SongList(TemplateView):
     template_name = 'song_list.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['songs'] = songs
         return context
+
 
 class SongCreate(View):
     def post(self, request, pk):
@@ -123,13 +139,16 @@ class SongCreate(View):
         SingleSong.objects.create(title=title, length=length, artist=artist)
         return redirect('artist_detail', pk=pk)
 
+
 class Home(TemplateView):
     template_name = "home.html"
     # Here we have added the playlists as context
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["playlists"] = Playlist.objects.all()
         return context
+
 
 class PlaylistSongAssoc(View):
     def get(self, request, pk, song_pk):
@@ -145,6 +164,7 @@ class PlaylistSongAssoc(View):
             Playlist.objects.get(pk=pk).songs.add(song_pk)
         return redirect('home')
 
+
 class ArtistDetail(DetailView):
     model = Artist
     template_name = "artist_detail.html"
@@ -153,4 +173,3 @@ class ArtistDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context["playlists"] = Playlist.objects.all()
         return context
-
