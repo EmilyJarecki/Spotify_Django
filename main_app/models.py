@@ -1,5 +1,6 @@
 from django.db import models
 import time
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Artist(models.Model):
@@ -10,6 +11,9 @@ class Artist(models.Model):
     verified_artist = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # user auth- one to many FK
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    
     # To display an object in the Django admin site and as the value inserted into a template when it display an object
     def __str__(self):
         return self.name
