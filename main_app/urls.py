@@ -24,5 +24,5 @@ urlpatterns = [
     path('playlists/<int:pk>/songs/<int:song_pk>/',
          views.PlaylistSongAssoc.as_view(), name="playlist_song_assoc"),
     path('accounts/', include('django.contrib.auth.urls')),
-
+    path('accounts/signup/', views.Signup.as_view(), name="signup"),
 ]
