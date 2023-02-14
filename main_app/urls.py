@@ -25,4 +25,6 @@ urlpatterns = [
          views.PlaylistSongAssoc.as_view(), name="playlist_song_assoc"),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/signup/', views.Signup.as_view(), name="signup"),
+    # linking sign-in signout pages
+    path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
