@@ -2,7 +2,7 @@
 
 # import base serializer class and model
 from rest_framework import serializers
-from .models import Artist
+from .models import Artist, Song
 
 # Meta class 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,6 +13,15 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
         many=True,
         read_only=True
     )
+    # so that Artist and Song in List view contain a link to their details
+    artist_url = serializers.ModelSerializer.serializer_url_field(
+        view_name='artist_detail'
+    )
     class Meta:
        model = Artist
        fields = ('id', 'name', 'img', 'bio', 'verified_artist',)
+
+class SongSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Song
+        fields = ('pk', 'title', 'length', 'artist')
