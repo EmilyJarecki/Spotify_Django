@@ -4,18 +4,28 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
-
+# define a Migration class, which is a subclass of migrations.Migration
 class Migration(migrations.Migration):
 
+    # two dependencies
+
     dependencies = [
+
+        # a dependency on the user model specified in settings
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+
+        # Playlist model needs to be created before adding the "user" field to the Artist model
         ('main_app', '0003_playlist'),
     ]
 
     operations = [
+        # adds a new field to an existing model
+        # link artists to specific users in the authnetication system
         migrations.AddField(
             model_name='artist',
             name='user',
+
+            # CASCADE = when user is deleted, so it this artist
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
     ]

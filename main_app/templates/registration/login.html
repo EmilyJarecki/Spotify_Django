@@ -1,9 +1,18 @@
 {% extends 'base.html' %} {% block content %}
 
 <h1 class="title">Log In</h1>
+
+<!-- submits data using the POST method -->
+<!-- action is dynamic url based on specified url pattern name -->
 <form method="post" action="{% url 'login' %}">
+
+    <!-- csrf token is a security measure to protect against Cross-Site Request Forgery attacks -->
+    <!-- renders the form fields as paragraphs -->
     {% csrf_token %} {{ form.as_p }}
     <input type="submit" class="btn" value="login" />
+
+    <!-- hidden input field for privacy -->
+    <!-- value redirects after successful login -->
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

@@ -3,16 +3,21 @@
 
 from django.db import migrations, models
 
-
+# Migration a subclass of migrations.Migration
 class Migration(migrations.Migration):
 
+    # setting this to true inticates that this is an initial migration created when starting a new Django project
     initial = True
 
+    # does not depend on other migrations to be executed
     dependencies = [
     ]
 
+    # the actual migration operation - single operation which creates a new table in database
     operations = [
         migrations.CreateModel(
+
+            # will create a new table named "Artist" in the database with the specified fields and options
             name='Artist',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -23,6 +28,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
             options={
+
+                # specifies that the rows in the table shoudl be ordered by name
                 'ordering': ['name'],
             },
         ),

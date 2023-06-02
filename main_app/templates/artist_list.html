@@ -2,26 +2,36 @@
 
 <!-- SEO stands for “search engine optimization.” In simple terms, it means the process of improving your site to increase its visibility when people search -->
 {% comment %} for head title tags and helping us with SEO {% endcomment %}
+
+<!-- override title -->
 {% block title %}Artists{% endblock  %}
 
+<!-- override content -->
 {% block content %}
 
+<!-- displays header variable -->
 <h1 class="title pt-5">{{header}}</h1>
 <form class="mb-5" method="get">
   <div class="field has-addons">
     <div class="control">
-      <!--  Our input will search by name of artist  -->
+
+      <!-- input will search by name of artist  -->
       <input class="input" type="text" name="name" placeholder="name" />
     </div>
     <div class="control">
       <input class="button is-success" type="submit" value="Search" />
     </div>
   </div>
+
   <!--  This anchor tag will redirect back to artist list without a query param -->
   <a class="button is-dark" href="{% url 'artist_list' %}">Clear Search</a>
+
+  <!-- redirects to artist create page -->
   <a class="button is-dark" href="{% url 'artist_create' %}">Add Artist</a>
 </form>
 <div class="gallery">
+
+  <!-- redirects the user to the detail page of the corresponding artist when clicked -->
   {% for artist in artists %}
   <a href="{% url 'artist_detail' artist.pk%}">
     <div class="card">
@@ -35,6 +45,8 @@
       </div>
     </div>
   </a>
+
+  <!-- if empty and no artists avaliable -->
 	{% empty %}
   <article class="message">
     <div class="message-header">

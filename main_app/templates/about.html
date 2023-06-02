@@ -1,7 +1,13 @@
+<!-- this template inherits from base.html -->
 {% extends 'base.html' %}
+
+<!-- define a block named "title" -->
+<!-- will override the "title" block defined in the base template. -->
 {% block title %}
 About
 {% endblock %}
+
+<!-- will override "content" block defined in the base template -->
 {% block content %}
 <h1>Spotify About</h1>
 {% endblock %}

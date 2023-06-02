@@ -1,4 +1,5 @@
 {% extends 'base.html' %} 
+
 {% block content %}
 <div class="detail__img">
   <img src="{{artist.img}}" alt="{{artist.name}}" />
@@ -21,11 +22,15 @@
         <h3 class="title is-3">Songs</h3>
         {% for song in artist.songs.all %}
         <div class="song">
+
+          <!-- loop to iterate over each song and display its details -->
         <span>{{forloop.counter}}</span>
         <span><b>{{song.title}}</b></span>
         <span>{{song.get_length}}</span>
         </div>
         <span>
+
+          <!-- dropdown which iterates over the available playlists and creates a dropdown item for each playlist -->
           <div class="dropdown">
             <div class="dropdown-trigger">
               <button
@@ -67,8 +72,8 @@
     </div>
     <!-- inside detail songs element below the header -->
 
-<!-- Here you can see the action we provided
-     is to the song_create route with the artist pk -->
+  <!-- Here you can see the action we provided is to the song_create route with the artist pk -->
+     <!-- This form allows the user to add a new song for the artist. It collects the title and length of the song and submits the form to the "song_create" route -->
     <form class="mb-5" action="{% url 'song_create' artist.pk %}" method="post">
         {% csrf_token %}
         <div class="field has-addons">
@@ -100,11 +105,14 @@
 <!-- before the for loop for songs -->
 
     <!--  above about section  -->
+    <!-- redirects the user to the artist update page for editing the artist's information -->
     <a href="{% url 'artist_update' artist.pk %}" class="button is-info">
         <span class="icon">
           <i class="fas fa-edit"></i>
         </span>
       </a>
+
+    <!-- redirects the user to the artist delete page to delete the artist's record -->
     <a href="{% url 'artist_delete' artist.pk %}" class="button is-danger">
       <span class="icon">
         <i class="fas fa-trash-alt"></i>

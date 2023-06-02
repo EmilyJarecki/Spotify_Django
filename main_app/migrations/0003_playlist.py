@@ -5,16 +5,25 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
+    # requires the song model
     dependencies = [
         ('main_app', '0002_song'),
     ]
 
     operations = [
+
+        # create new model called Playlist
         migrations.CreateModel(
             name='Playlist',
+
+            # the fields which will be shown
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=150)),
+
+                # establishes a many-to-many relationship between Playlist and Song model
+                # allows many songs to be associated with a playlist
+                # allows many playlists to be associated with a single song
                 ('songs', models.ManyToManyField(to='main_app.song')),
             ],
         ),

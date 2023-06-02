@@ -1,7 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <h1 class="pt-3">Update {{artist.name}}</h1>
 
+<!-- action attribute is empty, which means that the form will be submitted to the same URL where the user is currently located -->
 <form action="" method="post">
+
+  <!-- form fields should be displayed as paragraphs -->
   {% csrf_token %} {{form.as_p}} <input type="submit" value="Submit" />
 </form>
 

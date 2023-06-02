@@ -51,19 +51,11 @@ class ArtistList(TemplateView):
         # this is to get the query parameter. We have to access it in the request.GET dictionary object
         name = self.request.GET.get("name")
         if name != None:
-            # can be "album__icontains=album" if you would like to look it up by album instead of name
             # use .filter (user=self.request.user) because of user auth so that the list is only theirs
             context['artists'] = Artist.objects.filter(
                 name__icontains=name, user=self.request.user)
             context['header'] = f'Searching for {name}'
         else:
-            # .filter is the sql WHERE statement and name__icontains is doing a search for any name that contains the query param
-
-            # Context dictionary should have an artists key which has the value of all instantiated artists from above
-
-            # below if for static data/fake database
-            # context['artists'] = artists
-
             # using the model to query the database
             context['artists'] = Artist.objects.filter(user=self.request.user)
             context['header'] = 'Trending Artists'

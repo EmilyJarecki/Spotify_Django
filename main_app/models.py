@@ -40,6 +40,7 @@ class Song(models.Model):
 class Playlist(models.Model):
 
     title = models.CharField(max_length=150)
+    
     # this is going to create the many to many relationship and join table
     songs = models.ManyToManyField(Song)
 
