@@ -42,20 +42,24 @@ class About(TemplateView):
 # if you try to navigate to /artists it will redirect you to /login
 @method_decorator(login_required, name='dispatch')
 class ArtistList(TemplateView):
+
     # anticipated artist_list has yet to be created (our next step)
     template_name = "artist_list.html"
 
     # kwargs allows use to pass a variable number of keyword arguments to a Python function
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         # this is to get the query parameter. We have to access it in the request.GET dictionary object
         name = self.request.GET.get("name")
         if name != None:
+
             # use .filter (user=self.request.user) because of user auth so that the list is only theirs
             context['artists'] = Artist.objects.filter(
                 name__icontains=name, user=self.request.user)
             context['header'] = f'Searching for {name}'
         else:
+
             # using the model to query the database
             context['artists'] = Artist.objects.filter(user=self.request.user)
             context['header'] = 'Trending Artists'
@@ -129,20 +133,31 @@ class PlaylistSongAssoc(View):
         # get the query param from the url
         assoc = request.GET.get("assoc")
         if assoc == "remove":
+
             # get the playlist by the id and
             # remove from the join table the given song_id
             Playlist.objects.get(pk=pk).songs.remove(song_pk)
         if assoc == "add":
+            
             # get the playlist by the id and
             # add to the join table the given song_id
             Playlist.objects.get(pk=pk).songs.add(song_pk)
         return redirect('home')
 
+
 @method_decorator(login_required, name='dispatch')
+
+# login is required to view Artist
+# DetailView is a generic view provided by Django
 class ArtistDetail(DetailView):
+
+    # the model which we will be using
     model = Artist
+
+    # the html file this information will be going into
     template_name = "artist_detail.html"
 
+    # getting extra info into template like allowing the Playlist data to also be accessed
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["playlists"] = Playlist.objects.all()
@@ -150,11 +165,15 @@ class ArtistDetail(DetailView):
 
 # route for signup
 class Signup(View):
+
     # show a form to fill out
     def get(self, request):
+
+        # UserCreationForm() is provided by Django
         form = UserCreationForm()
         context = {"form": form}
         return render(request, "registration/signup.html", context)
+    
     # on form submit, validate the form and login the user.
     def post(self, request):
         form = UserCreationForm(request.POST)
